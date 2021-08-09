@@ -34,7 +34,7 @@ tasks.withType<KotlinCompile>().named("compileTestKotlin") {
 }
 
 dependencies {
-  implementation(deps.kotlin.reflect)
+  testImplementation(deps.kotlin.reflect)
   testImplementation(deps.kotlin.junit)
   testImplementation(deps.test.truth)
   testImplementation(deps.test.compileTesting)
