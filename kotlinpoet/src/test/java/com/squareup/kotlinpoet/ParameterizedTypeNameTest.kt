@@ -24,9 +24,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KType
-import kotlin.reflect.KTypeProjection
-import kotlin.reflect.KVariance
-import kotlin.reflect.full.createType
 
 class ParameterizedTypeNameTest {
   @Test fun classNamePlusParameter() {
@@ -73,24 +70,6 @@ class ParameterizedTypeNameTest {
     assertThat(LongArray::class.asTypeName().toString()).isEqualTo("kotlin.LongArray")
     assertThat(FloatArray::class.asTypeName().toString()).isEqualTo("kotlin.FloatArray")
     assertThat(DoubleArray::class.asTypeName().toString()).isEqualTo("kotlin.DoubleArray")
-  }
-
-  @Test fun arrayPlusPrimitiveParameter() {
-    val invariantInt = KTypeProjection(KVariance.INVARIANT, Int::class.createType())
-    val typeName = Array<Unit>::class.createType(listOf(invariantInt)).asTypeName()
-    assertThat(typeName.toString()).isEqualTo("kotlin.Array<kotlin.Int>")
-  }
-
-  @Test fun arrayPlusObjectParameter() {
-    val invariantCloseable = KTypeProjection(KVariance.INVARIANT, Closeable::class.createType())
-    val typeName = Array<Unit>::class.createType(listOf(invariantCloseable)).asTypeName()
-    assertThat(typeName.toString()).isEqualTo("kotlin.Array<java.io.Closeable>")
-  }
-
-  @Test fun arrayPlusNullableParameter() {
-    val invariantNullableCloseable = KTypeProjection(KVariance.INVARIANT, Closeable::class.createType(nullable = true))
-    val typeName = Array<Unit>::class.createType(listOf(invariantNullableCloseable)).asTypeName()
-    assertThat(typeName.toString()).isEqualTo("kotlin.Array<java.io.Closeable?>")
   }
 
   @Test fun typeParameter() {

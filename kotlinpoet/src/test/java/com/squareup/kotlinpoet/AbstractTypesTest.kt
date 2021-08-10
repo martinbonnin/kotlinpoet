@@ -25,12 +25,6 @@ import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeVisitor
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
-import kotlin.reflect.KTypeProjection
-import kotlin.reflect.KVariance
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.declaredFunctions
-import kotlin.reflect.full.starProjectedType
-import kotlin.reflect.full.withNullability
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.fail
@@ -185,21 +179,6 @@ abstract class AbstractTypesTest {
   @Test fun typeVariable() {
     val type = TypeVariableName("T", CharSequence::class)
     assertThat(type.toString()).isEqualTo("T") // (Bounds are only emitted in declaration.)
-  }
-
-  @Test fun kType() {
-    assertThat(Map::class.starProjectedType.asTypeName().toString())
-      .isEqualTo("kotlin.collections.Map<*, *>")
-    assertThat(Map::class.createType(listOf(KTypeProjection(KVariance.INVARIANT, String::class.createType(emptyList())), KTypeProjection.STAR)).asTypeName().toString())
-      .isEqualTo("kotlin.collections.Map<kotlin.String, *>")
-    assertThat(Map.Entry::class.createType(listOf(KTypeProjection(KVariance.INVARIANT, String::class.createType(emptyList())), KTypeProjection.STAR)).asTypeName().toString())
-      .isEqualTo("kotlin.collections.Map.Entry<kotlin.String, *>")
-    assertThat(Any::class.starProjectedType.withNullability(true).asTypeName().toString())
-      .isEqualTo("kotlin.Any?")
-
-    val treeMapClass = java.util.TreeMap::class
-    assertThat(treeMapClass.declaredFunctions.find { it.name == "parentOf" }!!.returnType.asTypeName().toString())
-      .isEqualTo("java.util.TreeMap.Entry<K, V>")
   }
 
   private class DeclaredTypeAsErrorType(private val declaredType: DeclaredType) : ErrorType {
